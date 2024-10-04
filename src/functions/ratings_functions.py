@@ -38,7 +38,23 @@ def print_match_history(match_history):
         print(f"Match {idx}: {match['winner']} vs {match['loser']}")
         
         
+def process_match_history(players, match_history):
+    for match in match_history:
+        winner = match['winner']
+        loser = match['loser']
+        update_ratings(players, match_history, winner, loser)
+        
+        
 
+def remove_specific_matchup(match_history, player1, player2):
+    return [
+        match for match in match_history
+        if not ((match['winner'] == player1 and match['loser'] == player2) or
+                (match['winner'] == player2 and match['loser'] == player1))
+    ]
+
+        
+        
 def simulate_matches(players, remaining_matches):
     scenarios = []
     initial_ratings = {player: players[player]["rating"] for player in players}
@@ -68,3 +84,36 @@ def highest_rating(players):
     # Function to get the player with the highest rating
     highest_rating_player = max(players, key=lambda x: players[x]['rating'])
     return highest_rating_player
+
+
+
+def simulate_match_ww(player_a, player_b, winrates, default_winrate = 0.5):
+    """
+    Simulate a match between player_a and player_b using predefined winrates.
+    If no winrate is specified, use the default winrate of 0.5 (50% chance for either player).
+    """
+    # Get the winrate for player_a against player_b (or default to 0.5 if not specified)
+    winrate_a = winrates.get((player_a, player_b), default_winrate)
+    
+    # Simulate the match based on the winrate
+    if random.random() < winrate_a:
+        return player_a  # Player A wins
+    else:
+        return player_b  # Player B wins
+
+
+
+def simulate_match_with_winrates(player_a, player_b, winrates):
+    import random
+    """
+    Simulate a match between player_a and player_b using predefined winrates.
+    Use random chance to determine the winner based on the winrate.
+    """
+    # Get the winrate for player_a beating player_b, default to 50% if not specified
+    winrate = winrates.get((player_a, player_b), 0.5)
+    
+    # Generate a random number between 0 and 1, and compare it to the winrate
+    if random.random() < winrate:
+        return player_a  # Player A wins
+    else:
+        return player_b  # Player B wins
