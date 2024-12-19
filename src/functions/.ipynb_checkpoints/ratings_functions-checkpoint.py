@@ -1,3 +1,4 @@
+
 def calculate_rating(rating_winner, rating_loser):
     k_factor = 32  # You can adjust this value based on your needs
 
@@ -117,3 +118,5 @@ def simulate_match_with_winrates(player_a, player_b, winrates):
         return player_a  # Player A wins
     else:
         return player_b  # Player B wins
+
+    

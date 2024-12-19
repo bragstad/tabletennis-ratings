@@ -57,7 +57,7 @@ def create_dash_app(players, df, df_sorted, match_history, include_plot=False, M
         # Add layout
         fig.update_layout(
             title="Player Progression",
-            xaxis_title="Month",
+            xaxis_title="Periode",
             yaxis_title="Rating"
         )
 
