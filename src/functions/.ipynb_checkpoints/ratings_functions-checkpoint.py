@@ -120,3 +120,31 @@ def simulate_match_with_winrates(player_a, player_b, winrates):
         return player_b  # Player B wins
 
     
+def calculate_win_rates(match_history):
+    import pandas as pd
+    # Convert match_history into a DataFrame
+    df_match_history = pd.DataFrame(match_history)
+
+    # Get unique players
+    players = sorted(list(set(df_match_history['winner']).union(set(df_match_history['loser']))))
+
+    # Create a dictionary to store win rates
+    winrate_dict = {}
+
+    # Compute win rates
+    for player in players:
+        for opponent in players:
+            if player != opponent:
+                total_matches = len(df_match_history[
+                    ((df_match_history['winner'] == player) & (df_match_history['loser'] == opponent)) |
+                    ((df_match_history['winner'] == opponent) & (df_match_history['loser'] == player))
+                ])
+                wins = len(df_match_history[
+                    (df_match_history['winner'] == player) & (df_match_history['loser'] == opponent)
+                ])
+
+                # Compute win rate, assigning 0.01 if no matches exist
+                win_rate = round((wins / total_matches), 2) if total_matches > 0 else 0.01
+                winrate_dict[(player, opponent)] = win_rate
+
+    return winrate_dict
